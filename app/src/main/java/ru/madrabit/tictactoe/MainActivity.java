@@ -30,39 +30,42 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public void startEvent(View view) {
-        pool.execute(animation(memory.rnd()));
-    }
+//    public void startEvent(View view) {
+//        pool.execute(animation());
+//    }
 
-    @SuppressLint("ResourceAsColor")
-    private Runnable animation(List<Integer> ids) {
-        return () -> {
-            for (Integer id : ids) {
-                try {
-                    Button btn = findViewById(id);
+//    @SuppressLint("ResourceAsColor")
+//    private Runnable animation(List<Integer> ids) {
+//        return () -> {
+//            for (Integer id : ids) {
+//                try {
+//                    Button btn = findViewById(id);
 //                    Pair<Integer, Integer> color = colors.get(btn.getId());
 //                    runOnUiThread(() -> btn.setBackgroundColor(color.second));
 //                    Thread.sleep(500);
-                    runOnUiThread(() -> btn.setBackgroundColor(android.R.color.black));
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-    }
+//                    runOnUiThread(() -> btn.setBackgroundColor(android.R.color.black));
+//                    Thread.sleep(500);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        };
+//    }
 
     public void answer(View view) {
         memory.addAnswer(view.getId());
-        pool.execute(animation(Collections.singletonList(view.getId())));
-        if (memory.check() && memory.isFinish()) {
-            memory.cleanAnswers();
-            msg("Level " + memory.level() + ". Good, Go next?");
-        } else if (!memory.check()) {
-            memory.cleanAnswers();
-            memory.cleanSeq();
-            msg("Level " + memory.level() + ". Wrong, Again?");
+        if (memory.isHorizontal()) {
+            msg("Win");
         }
+//        pool.execute(animation(Collections.singletonList(view.getId())));
+//        if (memory.check() && memory.isFinish()) {
+//            memory.cleanAnswers();
+//            msg("Level " + memory.level() + ". Good, Go next?");
+//        } else if (!memory.check()) {
+//            memory.cleanAnswers();
+//            memory.cleanSeq();
+//            msg("Level " + memory.level() + ". Wrong, Again?");
+//        }
     }
 
     private void msg(String text) {
@@ -70,8 +73,8 @@ public class MainActivity extends AppCompatActivity {
         alertDialogBuilder.setTitle("Memory Result");
         alertDialogBuilder
                 .setMessage(text)
-                .setCancelable(false)
-                .setPositiveButton("Ok", (dialog, id) -> pool.execute(animation(memory.rnd())));
+                .setCancelable(false);
+//                .setPositiveButton("Ok", (dialog, id) -> pool.execute(animation(memory.rnd())));
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
