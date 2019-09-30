@@ -53,10 +53,26 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
     public void answer(View view) {
-        memory.addAnswer(view.getId());
-        if (memory.isHorizontal()) {
-            msg("Win");
-        }
+       boolean humanMove = memory.addAnswer(view.getId());
+       if (humanMove) {
+           if (memory.isWin()) {
+               msg("Win");
+           } else {
+               Integer botMove = memory.botMove();
+               View botView = findViewById(botMove);
+               ((Button) botView).setText("О");
+           }
+           ((Button) view).setText("X");
+       } else {
+           msg("Cell not empty");
+       }
+       /*
+        Integer botMove = memory.botMove();
+        View botView = findViewById(botMove);
+        ((Button) botView).setText("О");
+        */
+//        memory.botMove();
+
 //        pool.execute(animation(Collections.singletonList(view.getId())));
 //        if (memory.check() && memory.isFinish()) {
 //            memory.cleanAnswers();

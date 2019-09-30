@@ -38,47 +38,54 @@ public class Logic {
         return size;
     }
 
-    public void addAnswer(Integer id) {
-        for (int i = 0; i < table.length; i++) {
-            for (int j = 0; j < table.length; j++) {
-                if (table[i][j] == id) {
-                    if (answers[i][j] == null) {
-                        answers[i][j] = 1;
-                        size++;
+    public boolean addAnswer(Integer id) {
+        if (hasGap()) {
+            for (int i = 0; i < table.length; i++) {
+                for (int j = 0; j < table.length; j++) {
+                    if(table[i][j].equals(id) && answers[i][j] != null) {
+                        return false;
+                    }
+                    if (table[i][j].equals(id)) {
+                        if (answers[i][j] == null) {
+                            answers[i][j] = 1;
+                            size++;
+                            return true;
+                        }
                     }
                 }
             }
         }
-        botMove();
+        return false;
     }
 
-    public void botMove() {
+    public Integer botMove() {
         Random rn = new Random();
         int id = btns.get(rn.nextInt(count));
         for (int i = 0; i < table.length; i++) {
             for (int j = 0; j < table.length; j++) {
-                if (table[i][j] == id && answers[i][j] != null) {
+                if (table[i][j].equals(id) && answers[i][j] != null) {
                     botMove();
                 }
-                if (table[i][j] == id) {
+                if (table[i][j].equals(id)) {
                     if (answers[i][j] == null) {
                         answers[i][j] = 0;
                         size++;
+                        return  id;
                     }
                 }
             }
         }
+        return 0;
     }
 
     public boolean isDiagonal() {
         boolean flagOne = true;
         boolean flagTwo = true;
         for (int i = 0; i < answers.length - 1; i++) {
-            if (answers[i][i] != answers[i + 1][i + 1]) {
+            if (answers[i][i] == null || answers[i][i] != answers[i + 1][i + 1]) {
                 flagOne = false;
             }
-            if (answers[i][answers.length - (1 +
-                    i)] != answers[i + 1][answers.length - (2 + i)]) {
+            if (answers[i][answers.length - (1 + i)] == null || answers[i][answers.length - (1 + i)] != answers[i + 1][answers.length - (2 + i)]) {
                 flagTwo = false;
             }
         }
@@ -135,6 +142,9 @@ public class Logic {
         return rsl;
     }
 
+    public boolean isWin() {
+        return isDiagonal() || isHorizontal() || isHorizontal();
+    }
 
 
     public void cleanAnswers() {
